@@ -58,3 +58,10 @@ All notable changes to this PoC project will be documented in this file.
 ### Changed
 - Improved agent script error handling and logging
 - Modified database connection to fallback to SQLite for development
+
+## [0.6.1] - 2025-05-01
+### Fixed
+- Fixed authentication between agent and backend using the standard Bearer token approach
+- Updated the FastAPI auth middleware to properly handle Authorization header with Bearer token
+- Improved agent configuration to properly pass authentication headers to the MCP server
+- Successfully tested end-to-end communication with authentication

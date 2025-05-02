@@ -19,15 +19,23 @@ logger = logging.getLogger(__name__)
 async def main():
     load_dotenv()
 
-    # Using the simple MCP endpoint URL - this worked in our first test
+    # Using the MCP endpoint URL with proper authorization headers
     fastapi_mcp_server_url = "http://127.0.0.1:8000/mcp"
     
     logger.info(f"Connecting to MCP server at: {fastapi_mcp_server_url}")
     
+    # Add authentication token as recommended in the documentation
+    # Using authorization header approach which is the recommended default
+    auth_token = "Bearer test-api-key"  # In production, this would come from env var
+    logger.info(f"Setting Authorization header: {auth_token}")
+    
     config = {
         "mcpServers": {
             "ecommerce_backend": {
-                "url": fastapi_mcp_server_url
+                "url": fastapi_mcp_server_url,
+                "headers": {
+                    "Authorization": auth_token
+                }
             }
         }
     }

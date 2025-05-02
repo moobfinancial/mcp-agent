@@ -34,13 +34,18 @@ This build plan breaks the PoC into incremental tasks with check-boxes so we can
 
 - [x] **7. Testing & validation**
   - Run backend with `uvicorn` and agent script; verify successful tool call
-  - Add authentication dependency and show 401 failure scenario (optional)
+  - Add authentication dependency and show 401 failure scenario
 
 - [x] **8. Documentation / README updates**
   - Explain local setup, running backend, running agent, env vars
 
 - [x] **9. Prepare for deployment (stretch goal)**
   - Containerize backend, CI pipeline, hosting
+
+- [x] **10. Authentication (critical feature)**
+  - Implement proper authentication between agent and MCP server
+  - Use standard Bearer token approach as recommended in MCP documentation
+  - Successfully tested end-to-end communication with authentication
 
 ---
 

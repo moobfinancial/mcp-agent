@@ -105,10 +105,35 @@ mcp_poc/
 5. The endpoint processes the request and returns the product data.
 6. The agent receives and displays the result.
 
+## Authentication
+
+The project implements standard Bearer token authentication:
+
+1. **Backend Security**: The FastAPI backend uses OAuth2-compatible Bearer token security via `HTTPBearer` dependency.
+
+2. **Agent Authorization**: The agent script sends authentication tokens via the `Authorization` header in the MCP configuration:
+   ```python
+   config = {
+       "mcpServers": {
+           "server_name": {
+               "url": "http://127.0.0.1:8000/mcp",
+               "headers": {
+                   "Authorization": "Bearer your-api-key"
+               }
+           }
+       }
+   }
+   ```
+
+3. **Production Considerations**: 
+   - In a production environment, use JWT tokens with proper expiration and signing
+   - Store tokens in environment variables, not in source code
+   - Consider implementing refresh token flows for long-running agents
+
 ## Next Steps
 
-- Integrate with a real PostgreSQL database
-- Add authentication to the endpoints
+- ✅ Integrate with a real PostgreSQL database
+- ✅ Add authentication to the endpoints
 - Create a simple React frontend that uses the AI agent
 - Deploy to a production environment
 
