@@ -14,6 +14,78 @@ The Model Context Protocol (MCP) is a standardized protocol that allows AI model
 - **MCP Integration**: Uses `fastapi-mcp` to expose FastAPI endpoints as callable tools
 - **AI Agent**: Python script using `mcp-use` to connect an LLM to the MCP server
 - **Database Layer**: Placeholder SQLAlchemy implementation (using SQLite for development)
+- **MCP Middleware**: Custom middleware for routing MCP agent requests to API endpoints
+
+## MCP Middleware Implementation (Added 2025-05-02)
+
+We've implemented a custom MCP middleware component that handles the communication between the MCP agent and our API endpoints. This middleware provides:
+
+- **Intent-to-Endpoint Mapping**: Maps MCP intents to API endpoints via configuration
+- **Authentication Handling**: Validates authentication tokens from MCP agent requests
+- **Parameter Validation**: Ensures all required parameters are present and valid
+- **Response Formatting**: Formats API responses for consumption by the MCP agent
+- **Error Handling**: Provides meaningful error messages for failed requests
+
+### Configuration
+
+The middleware is configured via a JSON file (`config/mcp_agent_config.json`) that defines:
+
+```json
+{
+  "version": "1.0.0",
+  "intents": {
+    "get_products": {
+      "endpoint": "/api/products",
+      "method": "GET",
+      "description": "Retrieve a list of all products"
+    },
+    // Other intents...
+  },
+  "parameters": {
+    // Parameter definitions...
+  },
+  "responses": {
+    // Response templates...
+  }
+}
+```
+
+### Usage
+
+```python
+from mcp.middleware import MCPMiddleware
+
+# Initialize the middleware
+middleware = MCPMiddleware()
+
+# Process a request from the MCP agent
+request = {
+    "intent": "get_products",
+    "parameters": {},
+    "token": "auth_token",
+    "session_id": "session_123"
+}
+
+response = middleware.route_request(request)
+```
+
+### Testing
+
+The middleware has been thoroughly tested with unit tests covering:
+
+- Authentication validation
+- Parameter extraction and validation
+- Request routing
+- Response formatting
+- Error handling
+
+Run the tests with:
+
+```bash
+python -m pytest tests/
+```
+
+See the `examples/mcp_integration_example.py` file for a complete usage example.
 
 ## Prerequisites
 
