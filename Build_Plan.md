@@ -39,7 +39,7 @@ This build plan breaks the PoC into incremental tasks with check-boxes so we can
 - [x] **8. Documentation / README updates**
   - Explain local setup, running backend, running agent, env vars
 
-- [ ] **9. Prepare for deployment (stretch goal)**
+- [x] **9. Prepare for deployment (stretch goal)**
   - Containerize backend, CI pipeline, hosting
 
 ---

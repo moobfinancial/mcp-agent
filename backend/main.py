@@ -2,9 +2,12 @@
 Run with:
     uvicorn backend.main:app --reload
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_mcp import FastApiMCP
+from .auth import get_current_user
+from .db.database import get_db, init_db
+from sqlalchemy.orm import Session
 
 app = FastAPI(title="E-commerce Backend PoC", version="0.1.0")
 
@@ -61,21 +64,33 @@ def search_products_in_db(name_substring: str):
 # ---------------------------------------------------------------------------
 
 @app.get("/products/{product_id}", operation_id="getProductById")
-async def get_product(product_id: str):
+async def get_product(
+    product_id: str, 
+    username: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """Retrieve product details by ID."""
-    product = get_product_from_db(product_id)
+    from .db import crud
+    
+    product = crud.get_product(db, int(product_id))
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
-    return product
+    return product.to_dict()
 
 
 @app.get("/products/search", operation_id="searchProducts")
-async def search_products(name: str):
+async def search_products(
+    name: str, 
+    username: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """Search for a product by (partial) name."""
-    product = search_products_in_db(name)
+    from .db import crud
+    
+    product = crud.search_products(db, name)
     if product is None:
         raise HTTPException(status_code=404, detail=f"Product '{name}' not found")
-    return product
+    return product.to_dict()
 
 
 # ---------------------------------------------------------------------------
@@ -85,6 +100,12 @@ async def search_products(name: str):
 mcp = FastApiMCP(app)
 # This will mount endpoints under /mcp (REST) and /mcp/sse (SSE)
 mcp.mount()
+
+# Initialize the database with tables and seed data on startup
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database on application startup."""
+    init_db()
 
 if __name__ == "__main__":  # dev helper: `python backend/main.py`
     import uvicorn

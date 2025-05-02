@@ -44,3 +44,17 @@ All notable changes to this PoC project will be documented in this file.
 - Validated end-to-end flow from agent to FastAPI backend via MCP
 ### Fixed
 - Modified agent endpoint URL from "/mcp/sse" to "/mcp" to correctly connect to the MCP server
+
+## [0.6.0] - 2025-05-01
+### Added
+- Authentication system with API key verification
+- Added `backend/auth.py` with dependencies for API key validation
+- Updated database layer to use PostgreSQL with environment variable configuration
+- Added database initialization on app startup
+- Modified endpoints to use real database instead of in-memory data
+- Added Dockerfiles and docker-compose.yml for containerization
+- Updated Build_Plan.md to mark all tasks as complete
+
+### Changed
+- Improved agent script error handling and logging
+- Modified database connection to fallback to SQLite for development

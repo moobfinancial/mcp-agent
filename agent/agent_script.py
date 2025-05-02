@@ -7,41 +7,57 @@ Ensure the FastAPI backend is running locally first:
     uvicorn backend.main:app --reload
 """
 import asyncio
+import logging
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from mcp_use import MCPAgent, MCPClient
 
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 async def main():
     load_dotenv()
 
-    # Try the standard MCP endpoint first
-    # If that doesn't work, we'll modify to use the correct one
+    # Using the simple MCP endpoint URL - this worked in our first test
     fastapi_mcp_server_url = "http://127.0.0.1:8000/mcp"
-
+    
+    logger.info(f"Connecting to MCP server at: {fastapi_mcp_server_url}")
+    
     config = {
         "mcpServers": {
             "ecommerce_backend": {
-                "url": fastapi_mcp_server_url,
+                "url": fastapi_mcp_server_url
             }
         }
     }
 
-    client = MCPClient.from_dict(config)
-
-    llm = ChatOpenAI(model="gpt-4o")
-
-    agent = MCPAgent(llm=llm, client=client, max_steps=20)
-
-    query = "Tell me about product 1"
-    print(f"Running agent query: {query}\n")
-
-    result = await agent.run(query)
-
-    print("\n--- Agent Result ---")
-    print(result)
-
-    await client.close_all_sessions()
+    try:
+        client = MCPClient.from_dict(config)
+        
+        llm = ChatOpenAI(model="gpt-4o")
+        logger.info("LLM initialized")
+        
+        agent = MCPAgent(llm=llm, client=client, max_steps=20, verbose=True)
+        logger.info("Agent created")
+        
+        # Try a direct product ID lookup which worked previously
+        query = "Tell me about product 1"
+        logger.info(f"Running agent query: {query}")
+        
+        result = await agent.run(query)
+        
+        print("\n--- Agent Result ---")
+        print(result)
+        
+    except Exception as e:
+        logger.error(f"Error running agent: {e}")
+        import traceback
+        traceback.print_exc()
+    finally:
+        if 'client' in locals():
+            await client.close_all_sessions()
+            logger.info("Closed client sessions")
 
 
 if __name__ == "__main__":
