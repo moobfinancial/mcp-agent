@@ -25,16 +25,18 @@ All notable changes to this PoC project will be documented in this file.
   - `backend/db/crud.py` with database operations
 - Updated `Build_Plan.md` to reflect progress on task #5
 
-## [0.4.0] - 2025-05-01
+## [0.4.0] - 2025-05-02
 ### Added
-- Created comprehensive project README.md with:
-  - Project overview and description of MCP
-  - Installation and setup instructions
-  - Usage guide for running backend and agent
-  - Project structure explanation
-  - "How it works" section explaining the integration flow
-  - Next steps and technologies used
-- Updated `Build_Plan.md` to check off documentation task
+- Implemented MCP middleware for routing agent requests to API endpoints
+- Created comprehensive configuration system for intent-to-endpoint mapping
+- Added parameter validation and response formatting
+- Implemented authentication handling for secure communication
+- Created thorough test suite with 100% test coverage for configuration
+- Added example script demonstrating middleware usage
+
+### Updated
+- Enhanced README with middleware documentation and usage examples
+- Updated Build Plan to prioritize MCP integration roadmap
 
 ## [0.5.0] - 2025-05-01
 ### Added
@@ -65,3 +67,24 @@ All notable changes to this PoC project will be documented in this file.
 - Updated the FastAPI auth middleware to properly handle Authorization header with Bearer token
 - Improved agent configuration to properly pass authentication headers to the MCP server
 - Successfully tested end-to-end communication with authentication
+
+## [0.7.0] - 2025-05-01
+### Added
+- Introduced a new section in Build_Plan.md detailing an ecommerce project with a ReactJS/Tailwind/shadcn frontend, AI agent integration, and admin portal.
+- Outlined future enhancements including personalized recommendations and extensive product management features.
+
+## [2025-05-02 00:55:39-04:00] Test Procedure and Results
+- Executed backend tests using pytest on the FastAPI backend integrated with PostgreSQL.
+- Resolved dependency override issues by refactoring the conftest.py override and updating the admin endpoint in main.py to use the injected session.
+- Implemented a dependency override that creates a fresh engine and session per request to ensure proper event loop usage.
+- All tests passed successfully.
+
+## [0.8.0] - 2025-05-02
+### Added
+- Updated database fixture in tests to drop all tables before tests run.
+- Configured engine with NullPool and future=True in tests to avoid connection concurrency issues.
+- Modified the admin_create_product and user registration endpoints to fetch committed objects using session.get, resolving concurrent operation errors.
+- All tests are now passing successfully.
+
+### Next Task
+- Implement a user logout endpoint, ensuring that users can invalidate their JWT tokens (if applicable) or end their session securely.
