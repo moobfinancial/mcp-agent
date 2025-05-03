@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "intents": {
+    "get_products": {
+      "endpoint": "/api/products",
+      "method": "GET",
+      "description": "Retrieve a list of all products"
+    },
+    "get_product_detail": {
+      "endpoint": "/api/products/{id}",
+      "method": "GET",
+      "description": "Retrieve detailed information for a specific product",
+      "required_params": ["id"]
+    },
+    "create_order": {
+      "endpoint": "/api/orders",
+      "method": "POST",
+      "description": "Create a new order",
+      "required_params": ["order_items"]
+    },
+    "get_user_profile": {
+      "endpoint": "/api/user/profile",
+      "method": "GET",
+      "description": "Get current user profile"
+    },
+    "update_user_profile": {
+      "endpoint": "/api/user/profile",
+      "method": "PUT",
+      "description": "Update user profile",
+      "required_params": ["user_id"]
+    }
+  },
+  "parameters": {
+    "product_id": {
+      "type": "integer",
+      "description": "Unique identifier for a product"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "Unique identifier for a user"
+    },
+    "order_items": {
+      "type": "array",
+      "description": "List of items in an order"
+    },
+    "quantity": {
+      "type": "integer",
+      "description": "Quantity of a product",
+      "default": 1,
+      "validation": "value > 0"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price of a product",
+      "validation": "value >= 0"
+    },
+    "id": {
+      "type": "integer",
+      "description": "Generic ID parameter used in URL paths"
+    }
+  },
+  "responses": {
+    "product_list": {
+      "template": "Found {count} products",
+      "variables": ["count"]
+    },
+    "product_detail": {
+      "template": "Here are the details for {name}",
+      "variables": ["name"]
+    },
+    "order_confirmation": {
+      "template": "Order #{order_id} has been created successfully",
+      "variables": ["order_id"]
+    },
+    "user_profile": {
+      "template": "Profile information for {username}",
+      "variables": ["username"]
+    },
+    "error_not_found": {
+      "template": "Sorry, the requested {resource} could not be found",
+      "variables": ["resource"]
+    },
+    "error_validation": {
+      "template": "There was an error with your request: {error_message}",
+      "variables": ["error_message"]
+    }
+  }
+}
